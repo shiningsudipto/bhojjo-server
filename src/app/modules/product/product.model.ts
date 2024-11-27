@@ -7,7 +7,6 @@ const productSchema = new Schema<TProduct>({
   subCategory: {
     type: Schema.Types.ObjectId,
     ref: 'SubCategory',
-    required: true,
   },
   images: [String],
   weight: { type: Number, default: 0 },
