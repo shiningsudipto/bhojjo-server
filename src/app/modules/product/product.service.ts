@@ -18,6 +18,38 @@ const createProductIntoDB = async (payload: TProduct) => {
   return result
 }
 
+const getSingleProductFromDB = async (slug: string) => {
+  const isProductAvailable = await Product.findOne({ slug })
+  if (!isProductAvailable) {
+    throw new Error('Product not found!')
+  }
+  const result = await Product.findOneAndUpdate(
+    { slug },
+    { $inc: { view: 1 } },
+    { new: true },
+  )
+  return result
+}
+const getAllProductFromDB = async () => {
+  const result = await Product.find()
+  return result
+}
+const updateProductFromDB = async (id: string, payload: TProduct) => {
+  const result = await Product.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  })
+  return result
+}
+const deleteProductFromDB = async (id: string) => {
+  const result = await Product.findByIdAndDelete(id)
+  return result
+}
+
 export const productServices = {
   createProductIntoDB,
+  getAllProductFromDB,
+  getSingleProductFromDB,
+  updateProductFromDB,
+  deleteProductFromDB,
 }

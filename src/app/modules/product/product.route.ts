@@ -11,5 +11,9 @@ router.post(
   parseBody,
   productController.createPost,
 )
+router.get('/', productController.getAllProduct)
+router.get('/:slug', productController.getSingleProduct)
+router.delete('/:id', productController.deleteProduct)
+router.put('/:id', productController.updateProduct)
 
 export const ProductRoutes = router

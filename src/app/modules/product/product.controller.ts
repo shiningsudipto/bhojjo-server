@@ -24,6 +24,58 @@ const createPost = catchAsync(async (req, res) => {
   })
 })
 
+const getSingleProduct = catchAsync(async (req, res) => {
+  const { slug } = req.params
+  const result = await productServices.getSingleProductFromDB(slug)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product retrieved successfully',
+    data: result,
+  })
+})
+
+const getAllProduct = catchAsync(async (req, res) => {
+  const result = await productServices.getAllProductFromDB()
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product retrieved successfully',
+    data: result,
+  })
+})
+
+const deleteProduct = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const result = await productServices.deleteProductFromDB(id)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product deleted successfully',
+    data: result,
+  })
+})
+
+const updateProduct = catchAsync(async (req, res) => {
+  const { id } = req.params
+  const payload = req.body
+  const result = await productServices.updateProductFromDB(id, payload)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product updated successfully',
+    data: result,
+  })
+})
+
 export const productController = {
   createPost,
+  getAllProduct,
+  getSingleProduct,
+  deleteProduct,
+  updateProduct,
 }

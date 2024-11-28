@@ -13,4 +13,5 @@ export interface TProduct {
   discount: number
   adminId: Types.ObjectId
   slug: string
+  view: number
 }

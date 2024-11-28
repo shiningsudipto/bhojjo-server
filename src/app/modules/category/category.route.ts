@@ -6,6 +6,6 @@ const router = express.Router()
 router.post('/category', categoryControllers.createCategory)
 router.get('/category', categoryControllers.getAllCategory)
 router.put('/category/:id', categoryControllers.updateCategory)
-router.put('/category/:id', categoryControllers.deleteCategory)
+router.delete('/category/:id', categoryControllers.deleteCategory)
 
 export const UserRoutes = router

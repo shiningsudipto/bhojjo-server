@@ -13,10 +13,11 @@ const productSchema = new Schema<TProduct>({
   quantity: { type: Number, required: true },
   details: String,
   sold: { type: Number, default: 0 },
+  view: { type: Number, default: 0 },
   price: { type: Number, required: true },
   discount: { type: Number, default: 0 },
   adminId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  slug: { type: String, required: true },
+  slug: { type: String },
 })
 
 export const Product = mongoose.model<TProduct>('Product', productSchema)
