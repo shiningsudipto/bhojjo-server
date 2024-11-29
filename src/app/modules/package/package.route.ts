@@ -5,15 +5,12 @@ const router = express.Router()
 // package
 router.post('/', packageControllers.createPackage)
 router.get('/:buyerID', packageControllers.getPackageByBuyer)
-router.put('/:packageId', packageControllers.getPackageByBuyer)
-router.delete('/:packageId', packageControllers.getPackageByBuyer)
+router.put('/:packageId', packageControllers.updatePackage)
+router.delete('/:packageId', packageControllers.deletePackage)
 // package item
 router.post('/item', packageControllers.createPackageItem)
 router.get('/item/:packageId', packageControllers.getPackageItemByPackage)
-router.put('/item/:packageItemId', packageControllers.getPackageItemByPackage)
-router.delete(
-  '/item/:packageItemId',
-  packageControllers.getPackageItemByPackage,
-)
+router.put('/item/:packageItemId', packageControllers.updatePackageItem)
+router.delete('/item/:packageItemId', packageControllers.deletePackageItem)
 
 export const PackageRoutes = router
