@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TPackage, TPackageItem } from './package.interface'
 import { Package, PackageItem } from './package.model'
 
@@ -6,9 +7,37 @@ const createPackageIntoDB = async (payload: TPackage) => {
   return result
 }
 
-const getPackageByBuyerFromDB = async (id: string) => {
-  const result = await Package.find({ buyer: id })
-  return result
+const getPackageByBuyerFromDB = async (buyerId: string) => {
+  const packages = await Package.find({ buyer: buyerId }).lean()
+
+  const packageData = await Promise.all(
+    packages.map(async (pkg) => {
+      const packageItems = await PackageItem.find({ packageId: pkg._id })
+        .populate('productId', 'price')
+        .lean()
+
+      const totalItems = packageItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0,
+      )
+
+      const totalPrice = packageItems.reduce((sum, item) => {
+        // Check if productId exists and has a price
+        if (item.productId && (item.productId as any).price) {
+          return sum + item.quantity * (item.productId as any).price
+        }
+        return sum
+      }, 0)
+
+      return {
+        ...pkg,
+        totalItems,
+        totalPrice,
+      }
+    }),
+  )
+
+  return packageData
 }
 
 const deletePackageFromDB = async (id: string) => {
