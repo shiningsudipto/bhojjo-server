@@ -61,7 +61,18 @@ const deleteProduct = catchAsync(async (req, res) => {
 
 const updateProduct = catchAsync(async (req, res) => {
   const { id } = req.params
-  const payload = req.body
+  const productInfo = req.body
+  const files = req.files as TImageFiles
+
+  // Check if new images are uploaded
+  const filePaths = files?.images?.length
+    ? files.images.map((file) => `/uploads/${file.filename}`)
+    : undefined
+
+  const payload = {
+    ...productInfo,
+    ...(filePaths && { images: filePaths }),
+  }
   const result = await productServices.updateProductFromDB(id, payload)
 
   sendResponse(res, {
