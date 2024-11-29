@@ -27,6 +27,31 @@ const getPackageByBuyer = catchAsync(async (req, res) => {
   })
 })
 
+const updatePackage = catchAsync(async (req, res) => {
+  const { packageId } = req.params
+  const payload = req.body
+  const result = await packageServices.updatePackageIntoDB(packageId, payload)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Package updated successfully',
+    data: result,
+  })
+})
+
+const deletePackage = catchAsync(async (req, res) => {
+  const { packageId } = req.params
+  const result = await packageServices.deletePackageFromDB(packageId)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Package deleted successfully',
+    data: result,
+  })
+})
+
 const createPackageItem = catchAsync(async (req, res) => {
   const payload = req.body
   const result = await packageServices.createPackageItemIntoDB(payload)
@@ -51,9 +76,43 @@ const getPackageItemByPackage = catchAsync(async (req, res) => {
   })
 })
 
+const updatePackageItem = catchAsync(async (req, res) => {
+  const { packageItemId } = req.params
+  const payload = req.body
+  const result = await packageServices.updatePackageItemIntoDB(
+    packageItemId,
+    payload,
+  )
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Package item updated successfully',
+    data: result,
+  })
+})
+
+const deletePackageItem = catchAsync(async (req, res) => {
+  const { packageItemId } = req.params
+  const result = await packageServices.deletePackageFromDB(packageItemId)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Package item deleted successfully',
+    data: result,
+  })
+})
+
 export const packageControllers = {
+  // package
   createPackage,
   getPackageByBuyer,
+  updatePackage,
+  deletePackage,
+  // package item
   createPackageItem,
   getPackageItemByPackage,
+  updatePackageItem,
+  deletePackageItem,
 }
