@@ -23,8 +23,8 @@ const getPackageByBuyerFromDB = async (buyerId: string) => {
 
       const totalPrice = packageItems.reduce((sum, item) => {
         // Check if productId exists and has a price
-        if (item.productId && (item.productId as any).price) {
-          return sum + item.quantity * (item.productId as any).price
+        if (item.product && (item.product as any).price) {
+          return sum + item.quantity * (item.product as any).price
         }
         return sum
       }, 0)
@@ -60,6 +60,16 @@ const createPackageItemIntoDB = async (payload: TPackageItem[]) => {
 
 const getPackageItemByBuyerFromDB = async (id: string) => {
   const result = await PackageItem.find({ packageId: id })
+    .populate({
+      path: 'product',
+      model: 'Product',
+      select: 'price title images quantity',
+    })
+    .populate({
+      path: 'package',
+      model: 'Package',
+      select: 'name buyer',
+    })
   return result
 }
 

@@ -8,7 +8,7 @@ export interface TPackage {
 
 export interface TPackageItem {
   id: string
-  productId: Types.ObjectId
-  packageId: Types.ObjectId
+  product: Types.ObjectId
+  package: Types.ObjectId
   quantity: number
 }

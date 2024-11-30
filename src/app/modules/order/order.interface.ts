@@ -1,12 +1,12 @@
 import { Types } from 'mongoose'
 
 export type EOrderStatus =
-  | 'Pending'
-  | 'InProgress'
-  | 'Delivering'
-  | 'Delivered'
-  | 'Canceled'
-export type EOrderItemStatus = 'Pending' | 'Packed'
+  | 'pending'
+  | 'inProgress'
+  | 'delivering'
+  | 'delivered'
+  | 'canceled'
+export type EOrderItemStatus = 'pending' | 'packed'
 
 export interface TOrder {
   id: string

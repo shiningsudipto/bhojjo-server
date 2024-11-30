@@ -9,8 +9,8 @@ const packageSchema = new Schema<TPackage>({
 export const Package = mongoose.model<TPackage>('Package', packageSchema)
 
 const packageItemSchema = new Schema<TPackageItem>({
-  productId: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-  packageId: { type: Schema.Types.ObjectId, ref: 'Package', required: true },
+  product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
+  package: { type: Schema.Types.ObjectId, ref: 'Package', required: true },
   quantity: { type: Number, required: true },
 })
 
