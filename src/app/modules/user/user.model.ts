@@ -6,9 +6,9 @@ import config from '../../config'
 const userSchema = new Schema<TUser, UserModel>(
   {
     name: { type: String },
-    email: { type: String, required: false, unique: true },
+    email: { type: String, required: false },
     password: { type: String },
-    phone: { type: String, required: true },
+    phone: { type: String, required: true, unique: true },
     role: {
       type: String,
       enum: ['admin', 'user'],

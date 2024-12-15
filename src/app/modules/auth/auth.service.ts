@@ -38,17 +38,15 @@ const sendOtpToTheUser = async (phone: string) => {
 }
 
 const loginUser = async (payload: TLoginUser) => {
-  const user = await User.isUserExistsByPhone(payload.phone)
+  let user = await User.isUserExistsByPhone(payload.phone)
+
   if (!user) {
-    const result = await User.create(payload)
-    return {
-      accessToken: generateToken(user),
-      result,
-    }
+    await User.create(payload)
+    user = await User.isUserExistsByPhone(payload.phone)
   }
+
   return {
     accessToken: generateToken(user),
-    user,
   }
 }
 

@@ -17,14 +17,14 @@ const sendOTP = catchAsync(async (req, res) => {
 
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body)
-  const { accessToken, user } = result
+  const { accessToken } = result
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User logged in successfully',
     accessToken: accessToken,
-    data: user,
+    data: '',
   })
 })
 
