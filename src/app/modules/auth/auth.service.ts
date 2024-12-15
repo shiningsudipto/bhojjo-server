@@ -22,6 +22,7 @@ const sendOtpToTheUser = async (phone: string) => {
   try {
     // Send POST request to the BulkSMS API
     const response = await axios.post(url, body)
+    // console.log({ response })
     if (response.data.response_code == 202) {
       return {
         otp: message,
@@ -31,6 +32,7 @@ const sendOtpToTheUser = async (phone: string) => {
       throw new Error('Failed to send OTP')
     }
   } catch (error) {
+    // console.log(error)
     throw new Error('Error sending OTP to the user')
   }
 }

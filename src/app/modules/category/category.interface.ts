@@ -2,11 +2,11 @@ import { Types } from 'mongoose'
 
 export interface TCategory {
   id?: string // Primary Key
-  categoryName: string
+  category: string
 }
 
 export interface TSubCategory {
   id?: string // Primary Key
-  subCategoryName: string
+  subCategory: string
   category: Types.ObjectId
 }

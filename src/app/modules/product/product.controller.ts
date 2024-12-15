@@ -3,11 +3,13 @@ import catchAsync from '../../utils/catchAsync'
 import sendResponse from '../../utils/sendResponse'
 import { TImageFiles } from '../../interface/image.interface'
 import { productServices } from './product.service'
+import { TFile } from '../../interface'
 
 const createPost = catchAsync(async (req, res) => {
   const postInfo = req.body
   const files = req.files as TImageFiles
-  const filePaths = files.images.map((file) => `/uploads/${file.filename}`)
+  // const filePaths = files?.images?.map((file) => `/uploads/${file.filename}`)
+  const filePaths = files?.images?.map((file: TFile) => file.path)
 
   const payload = {
     ...postInfo,
@@ -19,7 +21,7 @@ const createPost = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Post created successfully',
+    message: 'Product created successfully',
     data: result,
   })
 })
@@ -35,9 +37,22 @@ const getSingleProduct = catchAsync(async (req, res) => {
     data: result,
   })
 })
-
 const getAllProduct = catchAsync(async (req, res) => {
-  const result = await productServices.getAllProductFromDB()
+  // Extract query parameters
+  const { category, minPrice, maxPrice, searchTerm, sortBy, sortOrder } =
+    req.query
+
+  // Parse query parameters and prepare filters
+  const filters = {
+    category: category as string,
+    minPrice: minPrice ? parseFloat(minPrice as string) : undefined,
+    maxPrice: maxPrice ? parseFloat(maxPrice as string) : undefined,
+    searchTerm: searchTerm as string,
+    sortBy: sortBy as string,
+    sortOrder: sortOrder as 'asc' | 'desc',
+  }
+
+  const result = await productServices.getAllProductFromDB(filters)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

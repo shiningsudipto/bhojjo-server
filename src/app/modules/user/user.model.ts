@@ -15,6 +15,7 @@ const userSchema = new Schema<TUser, UserModel>(
       default: 'user',
     },
     address: { type: String, required: false },
+    district: { type: String, required: false },
   },
   {
     timestamps: true,

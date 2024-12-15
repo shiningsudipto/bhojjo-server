@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from 'express'
 import httpStatus from 'http-status'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import config from '../config'
-import { TUserRole } from '../modules/user/user.interface'
 import { User } from '../modules/user/user.model'
 import catchAsync from '../utils/catchAsync'
+import { TUserRole } from '../modules/user/user.interface'
 
 const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -25,12 +25,12 @@ const auth = (...requiredRoles: TUserRole[]) => {
       config.jwt_access_secret as string,
     ) as JwtPayload
 
-    const { role, email } = decoded
+    const { role, phone } = decoded
 
     // console.log(email)
 
     // checking if the user is exist
-    const user = await User.isUserExistsByEmail(email)
+    const user = await User.isUserExistsByPhone(phone)
 
     if (!user) {
       return res.status(httpStatus.UNAUTHORIZED).json({
@@ -48,7 +48,8 @@ const auth = (...requiredRoles: TUserRole[]) => {
         message: 'You have no access to this route',
       })
     }
-
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //  @ts-expect-error
     req.user = decoded as JwtPayload
     next()
   })
