@@ -16,11 +16,6 @@ const getPackageByBuyerFromDB = async (buyerId: string) => {
         .populate('productId', 'price')
         .lean()
 
-      const totalItems = packageItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0,
-      )
-
       const totalPrice = packageItems.reduce((sum, item) => {
         // Check if productId exists and has a price
         if (item.product && (item.product as any).price) {
@@ -31,7 +26,6 @@ const getPackageByBuyerFromDB = async (buyerId: string) => {
 
       return {
         ...pkg,
-        totalItems,
         totalPrice,
       }
     }),
@@ -53,23 +47,35 @@ const updatePackageIntoDB = async (id: string, payload: TPackage) => {
   return result
 }
 
-const createPackageItemIntoDB = async (payload: TPackageItem[]) => {
-  const result = await PackageItem.insertMany(payload, { ordered: true })
+// const createPackageItemIntoDB = async (payload: TPackageItem[]) => {
+//   const result = await PackageItem.insertMany(payload, { ordered: true })
+//   return result
+// }
+
+const createPackageItemIntoDB = async (payload: TPackageItem) => {
+  console.log(payload)
+  const result = await PackageItem.create(payload)
+
+  await Package.findByIdAndUpdate(
+    payload.package,
+    { $inc: { totalItems: 1 } },
+    { new: true },
+  )
+
   return result
 }
 
 const getPackageItemByBuyerFromDB = async (id: string) => {
-  const result = await PackageItem.find({ packageId: id })
-    .populate({
-      path: 'product',
-      model: 'Product',
-      select: 'price title images quantity',
-    })
-    .populate({
-      path: 'package',
-      model: 'Package',
-      select: 'name buyer',
-    })
+  const result = await PackageItem.find({ package: id }).populate({
+    path: 'product',
+    model: 'Product',
+    select: 'price title images quantity',
+  })
+  // .populate({
+  //   path: 'package',
+  //   model: 'Package',
+  //   select: 'name buyer',
+  // })
   return result
 }
 

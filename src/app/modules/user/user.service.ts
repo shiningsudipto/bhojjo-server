@@ -28,10 +28,7 @@ const getUserFromDB = async (email: string) => {
   return result
 }
 const getUserByIdFromDB = async (id: string) => {
-  const result = await User.findById(id).populate(
-    'following followers',
-    '_id name avatar',
-  )
+  const result = await User.findById(id)
   if (!result) {
     throw new Error('User not found!')
   }

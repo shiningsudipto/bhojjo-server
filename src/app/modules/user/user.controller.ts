@@ -5,7 +5,6 @@ import sendResponse from '../../utils/sendResponse'
 import httpStatus from 'http-status'
 import { getUserInfoFromToken } from '../../utils/getUserInfoFromToken'
 import { User } from './user.model'
-import { TUser } from './user.interface'
 
 const createUser = catchAsync(async (req, res) => {
   const payload = req.body
@@ -60,15 +59,9 @@ const getSingleUser = catchAsync(async (req, res) => {
 })
 const updateUser = catchAsync(async (req, res) => {
   const { id } = req.params
-  const userInfo = req.body
-  const files = req.files as { avatar?: Express.Multer.File[] }
-  const userAvatar = files?.avatar?.[0]?.path
+  const payload = req.body
 
-  const updatedUserData: Partial<TUser> = {
-    ...userInfo,
-    ...(userAvatar ? { avatar: userAvatar } : {}), // Only include avatar if it exists
-  }
-  const result = await userServices.updateUserIntoDB(id, updatedUserData)
+  const result = await userServices.updateUserIntoDB(id, payload)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

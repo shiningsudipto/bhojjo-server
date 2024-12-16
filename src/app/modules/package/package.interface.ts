@@ -4,6 +4,7 @@ export interface TPackage {
   id: string
   buyer: Types.ObjectId
   name: string
+  totalItems: number
 }
 
 export interface TPackageItem {

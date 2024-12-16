@@ -1,10 +1,16 @@
 import mongoose, { Schema } from 'mongoose'
 import { TPackage, TPackageItem } from './package.interface'
 
-const packageSchema = new Schema<TPackage>({
-  buyer: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  name: { type: String, required: true },
-})
+const packageSchema = new Schema<TPackage>(
+  {
+    buyer: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    name: { type: String, required: true },
+    totalItems: { type: Number, default: 0 },
+  },
+  {
+    timestamps: true,
+  },
+)
 
 export const Package = mongoose.model<TPackage>('Package', packageSchema)
 

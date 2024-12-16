@@ -41,8 +41,8 @@ const updatePackage = catchAsync(async (req, res) => {
 })
 
 const deletePackage = catchAsync(async (req, res) => {
-  const { packageId } = req.params
-  const result = await packageServices.deletePackageFromDB(packageId)
+  const id = req.body.id
+  const result = await packageServices.deletePackageFromDB(id)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
