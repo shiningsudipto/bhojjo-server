@@ -76,6 +76,7 @@ const getAllProductFromDB = async (filter: ProductFilter) => {
 
   return result
 }
+
 const updateProductFromDB = async (id: string, payload: TProduct) => {
   const result = await Product.findByIdAndUpdate(id, payload, {
     new: true,
@@ -83,14 +84,21 @@ const updateProductFromDB = async (id: string, payload: TProduct) => {
   })
   return result
 }
+
 const deleteProductFromDB = async (id: string) => {
   const result = await Product.findByIdAndDelete(id)
+  return result
+}
+
+const getProductForAdminFromDB = async () => {
+  const result = await Product.find()
   return result
 }
 
 export const productServices = {
   createProductIntoDB,
   getAllProductFromDB,
+  getProductForAdminFromDB,
   getSingleProductFromDB,
   updateProductFromDB,
   deleteProductFromDB,

@@ -7,6 +7,7 @@ import { TFile } from '../../interface'
 
 const createPost = catchAsync(async (req, res) => {
   const postInfo = req.body
+  console.log(postInfo)
   const files = req.files as TImageFiles
   // const filePaths = files?.images?.map((file) => `/uploads/${file.filename}`)
   const filePaths = files?.images?.map((file: TFile) => file.path)
@@ -62,8 +63,19 @@ const getAllProduct = catchAsync(async (req, res) => {
   })
 })
 
+const getAllProductForAdmin = catchAsync(async (req, res) => {
+  const result = await productServices.getProductForAdminFromDB()
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product retrieved successfully',
+    data: result,
+  })
+})
+
 const deleteProduct = catchAsync(async (req, res) => {
-  const { id } = req.params
+  const id = req.body.id
   const result = await productServices.deleteProductFromDB(id)
 
   sendResponse(res, {
@@ -80,14 +92,16 @@ const updateProduct = catchAsync(async (req, res) => {
   const files = req.files as TImageFiles
 
   // Check if new images are uploaded
-  const filePaths = files?.images?.length
-    ? files.images.map((file) => `/uploads/${file.filename}`)
-    : undefined
+  // const filePaths = files?.images?.length
+  //   ? files.images.map((file) => `/uploads/${file.filename}`)
+  //   : undefined
+  const filePaths = files?.images?.map((file: TFile) => file.path)
 
   const payload = {
     ...productInfo,
     ...(filePaths && { images: filePaths }),
   }
+
   const result = await productServices.updateProductFromDB(id, payload)
 
   sendResponse(res, {
@@ -104,4 +118,5 @@ export const productController = {
   getSingleProduct,
   deleteProduct,
   updateProduct,
+  getAllProductForAdmin,
 }

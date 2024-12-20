@@ -8,35 +8,47 @@ const createPackageIntoDB = async (payload: TPackage) => {
 }
 
 const getPackageByBuyerFromDB = async (buyerId: string) => {
-  const packages = await Package.find({ buyer: buyerId }).lean()
+  const packages = await Package.find({ buyer: buyerId })
 
-  const packageData = await Promise.all(
+  // Fetch and calculate totals for each package
+  const updatedPackages = await Promise.all(
     packages.map(async (pkg) => {
-      const packageItems = await PackageItem.find({ packageId: pkg._id })
-        .populate('productId', 'price')
+      const packageItems = await PackageItem.find({ package: pkg._id })
+        .populate('product', 'price discount')
         .lean()
 
+      // Calculate totalItems
+      const totalItems = packageItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0,
+      )
+
+      // Calculate totalPrice
       const totalPrice = packageItems.reduce((sum, item) => {
-        // Check if productId exists and has a price
-        if (item.product && (item.product as any).price) {
-          return sum + item.quantity * (item.product as any).price
-        }
-        return sum
+        const product = item.product as any
+        const price = product.discount
+          ? product.price * (1 - product.discount / 100)
+          : product.price
+
+        return Math.ceil(sum + item.quantity * price)
       }, 0)
 
+      // Add the calculated values to the package
       return {
-        ...pkg,
+        ...pkg.toObject(),
+        totalItems,
         totalPrice,
       }
     }),
   )
 
-  return packageData
+  return updatedPackages
 }
 
 const deletePackageFromDB = async (id: string) => {
-  const result = await Package.findByIdAndDelete(id)
-  return result
+  await Package.findByIdAndDelete(id)
+  await PackageItem.findOneAndDelete({ package: id })
+  return
 }
 
 const updatePackageIntoDB = async (id: string, payload: TPackage) => {
@@ -84,8 +96,8 @@ const deletePackageItemFromDB = async (id: string) => {
   return result
 }
 
-const updatePackageItemIntoDB = async (id: string, payload: TPackageItem) => {
-  const result = await PackageItem.findByIdAndUpdate(id, payload, {
+const updatePackageItemIntoDB = async (payload: TPackageItem) => {
+  const result = await PackageItem.findByIdAndUpdate(payload.id, payload, {
     new: true,
     runValidators: true,
   })

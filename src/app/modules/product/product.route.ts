@@ -12,8 +12,14 @@ router.post(
   productController.createPost,
 )
 router.get('/', productController.getAllProduct)
+router.get('/all', productController.getAllProductForAdmin)
 router.get('/:slug', productController.getSingleProduct)
-router.delete('/:id', productController.deleteProduct)
-router.put('/:id', productController.updateProduct)
+router.delete('/', productController.deleteProduct)
+router.put(
+  '/:id',
+  multerUpload.fields([{ name: 'images' }]),
+  parseBody,
+  productController.updateProduct,
+)
 
 export const ProductRoutes = router

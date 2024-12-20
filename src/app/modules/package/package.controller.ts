@@ -77,12 +77,8 @@ const getPackageItemByPackage = catchAsync(async (req, res) => {
 })
 
 const updatePackageItem = catchAsync(async (req, res) => {
-  const { packageItemId } = req.params
   const payload = req.body
-  const result = await packageServices.updatePackageItemIntoDB(
-    packageItemId,
-    payload,
-  )
+  const result = await packageServices.updatePackageItemIntoDB(payload)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -93,8 +89,8 @@ const updatePackageItem = catchAsync(async (req, res) => {
 })
 
 const deletePackageItem = catchAsync(async (req, res) => {
-  const { packageItemId } = req.params
-  const result = await packageServices.deletePackageFromDB(packageItemId)
+  const id = req.body.id
+  const result = await packageServices.deletePackageItemFromDB(id)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
