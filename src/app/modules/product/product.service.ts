@@ -72,7 +72,9 @@ const getAllProductFromDB = async (filter: ProductFilter) => {
   const sortDirection = sortOrder === 'desc' ? -1 : 1
 
   // Execute the query
-  const result = await Product.find(query).sort({ [sortField]: sortDirection })
+  const result = await Product.find(query)
+    .sort({ [sortField]: sortDirection })
+    .select('title price images slug discount')
 
   return result
 }
@@ -95,6 +97,12 @@ const getProductForAdminFromDB = async () => {
   return result
 }
 
+const getTopProductFromDB = async () => {
+  const products = await Product.find().sort({ view: -1 }).limit(6)
+
+  return products
+}
+
 export const productServices = {
   createProductIntoDB,
   getAllProductFromDB,
@@ -102,4 +110,5 @@ export const productServices = {
   getSingleProductFromDB,
   updateProductFromDB,
   deleteProductFromDB,
+  getTopProductFromDB,
 }

@@ -73,6 +73,16 @@ const getAllProductForAdmin = catchAsync(async (req, res) => {
     data: result,
   })
 })
+const getTopProducts = catchAsync(async (req, res) => {
+  const result = await productServices.getTopProductFromDB()
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product retrieved successfully',
+    data: result,
+  })
+})
 
 const deleteProduct = catchAsync(async (req, res) => {
   const id = req.body.id
@@ -119,4 +129,5 @@ export const productController = {
   deleteProduct,
   updateProduct,
   getAllProductForAdmin,
+  getTopProducts,
 }

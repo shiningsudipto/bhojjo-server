@@ -12,6 +12,7 @@ router.post(
   productController.createPost,
 )
 router.get('/', productController.getAllProduct)
+router.get('/top', productController.getTopProducts)
 router.get('/all', productController.getAllProductForAdmin)
 router.get('/:slug', productController.getSingleProduct)
 router.delete('/', productController.deleteProduct)
